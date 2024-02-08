@@ -13,12 +13,14 @@
 #############################################################################
 import pytest
 
+from karabo.middlelayer import State
 from karabo.middlelayer.testing import AsyncDeviceContext, event_loop
 
 from ..KaraboWorkshop2024Pipelines import KaraboWorkshop2024Pipelines
 
 _DEVICE_CONFIG = {
     "_deviceId_": "TestKaraboWorkshop2024Pipelines",
+    "input": {}
 }
 
 
@@ -28,3 +30,4 @@ async def test_instantiate(event_loop: event_loop):
     device = KaraboWorkshop2024Pipelines(_DEVICE_CONFIG)
     async with AsyncDeviceContext(device=device) as ctx:
         assert ctx.instances["device"] is device
+        assert device.state == State.ON
