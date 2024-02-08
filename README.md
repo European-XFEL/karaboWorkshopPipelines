@@ -1,4 +1,9 @@
-# KaraboWorkshop2024Pipelines Device (MiddleLayer)
+# Karabo Workshop 2024: Handling Fast Data through Pipelines
+
+This repository contains material for the third session (Handling Fast Data
+through Pipelines) of the Karabo developer workshop 2024:
+https://indico.desy.de/event/43185/
+
 
 ## Testing
 
