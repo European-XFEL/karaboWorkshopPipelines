@@ -19,18 +19,12 @@ from ..KaraboWorkshop2024Pipelines import KaraboWorkshop2024Pipelines
 
 _DEVICE_CONFIG = {
     "_deviceId_": "TestKaraboWorkshop2024Pipelines",
-    "greeting": "buongiorno"
 }
 
 
 @pytest.mark.timeout(30)
 @pytest.mark.asyncio
-async def test_greeting(event_loop: event_loop):
+async def test_instantiate(event_loop: event_loop):
     device = KaraboWorkshop2024Pipelines(_DEVICE_CONFIG)
     async with AsyncDeviceContext(device=device) as ctx:
         assert ctx.instances["device"] is device
-        for greet in ("Buongiorno", "Guten Tag", "Moin Moin"):
-            device.greeting = greet
-            assert device.greeting.value == greet
-            await device.hello()
-            assert device.greeting.value == "Hello world!"
