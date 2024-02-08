@@ -13,24 +13,21 @@
 #############################################################################
 import pytest
 
-from karabo.middlelayer.testing import AsyncDeviceContext, event_loop
+from karabo.middlelayer import State
+from karabo.middlelayer.testing import AsyncDeviceContext
 
-from ..KaraboWorkshop2024Pipelines import KaraboWorkshop2024Pipelines
+from ..KaraboWorkshopPipelines import KaraboWorkshopPipelines
 
 _DEVICE_CONFIG = {
-    "_deviceId_": "TestKaraboWorkshop2024Pipelines",
-    "greeting": "buongiorno"
+    "deviceId": "TestKaraboWorkshopPipelines",
+    "input": {}
 }
 
 
 @pytest.mark.timeout(30)
 @pytest.mark.asyncio
-async def test_greeting(event_loop: event_loop):
-    device = KaraboWorkshop2024Pipelines(_DEVICE_CONFIG)
+async def test_instantiate():
+    device = KaraboWorkshopPipelines(_DEVICE_CONFIG)
     async with AsyncDeviceContext(device=device) as ctx:
         assert ctx.instances["device"] is device
-        for greet in ("Buongiorno", "Guten Tag", "Moin Moin"):
-            device.greeting = greet
-            assert device.greeting.value == greet
-            await device.hello()
-            assert device.greeting.value == "Hello world!"
+        assert device.state == State.ON

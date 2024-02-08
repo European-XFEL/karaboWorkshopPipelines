@@ -1,25 +1,44 @@
 [build-system]
-requires = ["setuptools>=42", "setuptools-scm[toml]>=4.1", "wheel"]
+requires = ["setuptools>=64", "setuptools-scm>=6.4", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 root = "."
-write_to = "src/karaboWorkshop2024Pipelines/_version.py"
+write_to = "src/karaboWorkshopPipelines/_version.py"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-KaraboWorkshop2024Pipelines = ["data/*.*"]
+KaraboWorkshopPipelines = ["data/*.*"]
+
+[tool.isort]
+combine_as_imports = true
+include_trailing_comma = false
+# 4 - Hanging Grid, standard
+multi_line_output = 4
+line_length = 79
+known_first_party = ["karabo", "KaraboWorkshopPipelines"]
+src_paths = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "module"
+asyncio_default_test_loop_scope = "module"
+asyncio_mode = "auto"
 
 [project.entry-points."karabo.middlelayer_device"]
-KaraboWorkshop2024Pipelines = "karaboWorkshop2024Pipelines.KaraboWorkshop2024Pipelines:KaraboWorkshop2024Pipelines"
+KaraboWorkshopPipelines = "karaboWorkshopPipelines.KaraboWorkshopPipelines:KaraboWorkshopPipelines"
 
 [project]
+license = {file = "LICENSE.md"}
 dynamic = ["version"]
-name = "KaraboWorkshop2024Pipelines"
+name = "KaraboWorkshopPipelines"
 authors = [
-    {name = "parenti"},
+    {name = "Andrea Parenti"},
+    {name = "Gero Flucke"},
+]
+maintainers = [
+    {name = "Gero Flucke"},
 ]
 description = ""
 readme = "README.md"

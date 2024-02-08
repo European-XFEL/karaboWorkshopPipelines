@@ -1,6 +1,7 @@
 dist/
 build/
-src/karaboWorkshop2024Pipelines/_version.py
+src/karaboWorkshopPipelines/_version.py
+*~
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

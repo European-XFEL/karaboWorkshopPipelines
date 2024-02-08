@@ -11,7 +11,7 @@
 # IF YOU REQUIRE ANY LICENSING AND COPYRIGHT TERMS, PLEASE ADD THEM HERE.
 # Karabo itself is licensed under the terms of the MPL 2.0 license.
 #############################################################################
-import karaboWorkshop2024Pipelines
+import karaboWorkshopPipelines
 
 
 def test_import_sub_modules():
@@ -25,7 +25,7 @@ def test_import_sub_modules():
         return
 
     ignore = ["karabo.middlelayer.testing"]
-    ast_objects = get_ast_objects(karaboWorkshop2024Pipelines)
+    ast_objects = get_ast_objects(karaboWorkshopPipelines)
     for ast_obj in ast_objects:
         for mod in ["karabo.middlelayer", "karabo.middlelayer_api"]:
             assert not len(has_sub_imports(ast_obj, mod, ignore))

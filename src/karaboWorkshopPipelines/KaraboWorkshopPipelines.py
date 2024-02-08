@@ -12,25 +12,31 @@
 # Karabo itself is licensed under the terms of the MPL 2.0 license.
 #############################################################################
 
-from karabo.middlelayer import Device, Slot, String
+from karabo.middlelayer import Device, InputChannel, State
 
 from ._version import version as deviceVersion
 
 
-class KaraboWorkshop2024Pipelines(Device):
+class KaraboWorkshopPipelines(Device):
     __version__ = deviceVersion
-
-    greeting = String()
-
-    @Slot()
-    async def hello(self):
-        self.greeting = "Hello world!"
 
     def __init__(self, configuration):
         super().__init__(configuration)
+
+    @InputChannel(displayedName="Input")
+    async def input(self, data, meta):
+        # "data.image" is the path where the camera provides the image
+        image = data.data.image
+        pixels = image.pixels.value  # ndarray
+
+        await self.process_image(pixels)
+
+    async def process_image(self, pixels):
+        pass
 
     async def onInitialization(self):
         """ This method will be called when the device starts.
 
             Define your actions to be executed after instantiation.
         """
+        self.state = State.ON

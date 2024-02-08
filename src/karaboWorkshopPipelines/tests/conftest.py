@@ -4,13 +4,11 @@
 #
 # IF YOU REQUIRE ANY LICENSING AND COPYRIGHT TERMS, PLEASE ADD THEM HERE.
 # Karabo itself is licensed under the terms of the MPL 2.0 license.
+import pytest
 
-variables:
-  USE_ISORT: "true"
-  USE_FLAKE: "true"
-  USE_LEGACY_PYTEST: "false"
+from karabo.middlelayer.testing import KaraboTestLoopPolicy
 
-include:
-  - project: karabo/gitlabci
-    file: .python-ci.yml
-    ref: main
+
+@pytest.fixture(scope="session")
+def event_loop_policy():
+    return KaraboTestLoopPolicy()

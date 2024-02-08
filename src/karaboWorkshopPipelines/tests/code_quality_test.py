@@ -15,7 +15,7 @@ import os
 import os.path as op
 import subprocess
 
-import karaboWorkshop2024Pipelines
+import karaboWorkshopPipelines
 
 IGNORE_LIST = ["setup.py", "__init__.py"]
 
@@ -23,7 +23,7 @@ IGNORE_LIST = ["setup.py", "__init__.py"]
 def get_python_files():
     """Get all python files from this package
     """
-    common_dir = op.abspath(op.dirname(karaboWorkshop2024Pipelines.__file__))
+    common_dir = op.abspath(op.dirname(karaboWorkshopPipelines.__file__))
     flake_check = []
     for dirpath, _, filenames in os.walk(common_dir):
         for fn in filenames:
