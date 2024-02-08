@@ -14,7 +14,7 @@
 
 from karabo.middlelayer import (
     AccessMode, Assignment, Configurable, Device, Double, InputChannel, Node,
-    OutputChannel, State, UInt16)
+    OutputChannel, State, UInt16, get_timestamp)
 
 from ._version import version as deviceVersion
 
@@ -54,7 +54,8 @@ class KaraboWorkshop2024Pipelines(Device):
             image = data.data.image
             pixels = image.pixels.value  # ndarray
 
-            await self.process_image(pixels)
+            ts = get_timestamp(meta.timestamp.timestamp)
+            await self.process_image(pixels, ts)
 
             if self.state != State.PROCESSING:
                 self.state = State.PROCESSING
@@ -70,30 +71,20 @@ class KaraboWorkshop2024Pipelines(Device):
         displayedName="Output"
     )
 
-    async def process_image(self, pixels):
-        self.pixelMean = pixels.mean()
-        self.pixelMin = pixels.min()
-        self.pixelMax = pixels.max()
+    async def process_image(self, pixels, ts):
+        self.output.schema.data.pixelMean = pixels.mean()
+        self.output.schema.data.pixelMin = pixels.min()
+        self.output.schema.data.pixelMax = pixels.max()
 
-        # TODO: write mean, min and max to output channel instead
+        # Write to the output channel with the same timestamp as in the input
+        await self.output.writeData(timestamp=ts)
 
     @input.endOfStream
-    def input(self, name):
+    async def input(self, name):
         if self.state != State.ON:
             self.state = State.ON
             self.status = "IDLE"
-
-    pixelMean = Double(
-        displayedName="Pixel Average",
-        accessMode=AccessMode.READONLY)
-
-    pixelMin = UInt16(
-        displayedName="Min Pixel Value",
-        accessMode=AccessMode.READONLY)
-
-    pixelMax = UInt16(
-        displayedName="Max Pixel Value",
-        accessMode=AccessMode.READONLY)
+        await self.output.writeEndOfStream()
 
     async def onInitialization(self):
         """ This method will be called when the device starts.
