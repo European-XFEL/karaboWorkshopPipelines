@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=42", "setuptools-scm[toml]>=4.1", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+root = "."
+write_to = "src/karaboWorkshop2024Pipelines/_version.py"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+KaraboWorkshop2024Pipelines = ["data/*.*"]
+
+[project.entry-points."karabo.middlelayer_device"]
+KaraboWorkshop2024Pipelines = "karaboWorkshop2024Pipelines.KaraboWorkshop2024Pipelines:KaraboWorkshop2024Pipelines"
+
+[project]
+dynamic = ["version"]
+name = "KaraboWorkshop2024Pipelines"
+authors = [
+    {name = "parenti"},
+]
+description = ""
+readme = "README.md"
+dependencies = [
+]
