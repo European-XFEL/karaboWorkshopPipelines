@@ -13,7 +13,17 @@ https://indico.desy.de/event/43185/
 
 ### Introduction
 
-TODO: add here text or link to slides
+- Karabo data communication can be split in two categories: slow data and fast data.
+
+- Slow data is comprised of message exchanges intermediated by a broker.
+
+- Fast data is about larger amounts of data exchanged directly between devices through pipelines.
+
+- Fast data is transmitted in a point-to-point fashion over TCP/IP.
+
+- The connection details like host and port are exchanged using broker communication.
+
+- The most common use case is one output device connected to one or several input devices.
 
 ### Use of Input Channels
 
@@ -86,7 +96,7 @@ device.
    ``git commit -a -m"Some description"``
 
    ``git push origin some_other_name``
- 
+
 8. A working example can be found in the `step1` branch of this repository
 
    ``git checkout step2``
