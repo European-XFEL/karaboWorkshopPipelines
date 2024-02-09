@@ -27,13 +27,15 @@ More in detail:
 
 1. Check-out this project:
 
-    karabo -g https://git.xfel.eu checkout karaboWorkshop2024Pipelines
-    cd karaboWorkshop2024Pipelines
-    git checkout main
+   ``karabo -g https://git.xfel.eu checkout karaboWorkshop2024Pipelines``
+
+   ``cd karaboWorkshop2024Pipelines``
+
+   ``git checkout main``
 
 2. Create your branch
 
-    git checkout -b some_meaningful_name
+   ``git checkout -b some_meaningful_name``
 
 3. Add an input channel to device as described in the documentation
 
@@ -47,12 +49,13 @@ More in detail:
 
 7. Save your work!
 
-    git commit -a -m"Some description"
-    git push origin some_meaningful_name
+   ``git commit -a -m"Some description"``
+
+   ``git push origin some_meaningful_name``
 
 8. A working example can be found in the `step1` branch of this repository
 
-    git checkout step1
+   ``git checkout step1``
 
 
 ### Use of Output Channels
@@ -64,11 +67,11 @@ device.
    either start from your branch, from `step1` branch, or from this other
    branch where we have already added the output channel
 
-    git checkout step2_initial
+   ``git checkout step2_initial``
 
 2. If you are not on your branch, create it now
 
-    git checkout -b some_other_name
+   ``git checkout -b some_other_name``
 
 3. Prepare the schema for the output channel, i.e. some property to be written
 
@@ -80,12 +83,13 @@ device.
 
 7. Save your work!
 
-    git commit -a -m"Some description"
-    git push origin some_other_name
+   ``git commit -a -m"Some description"``
+
+   ``git push origin some_other_name``
  
 8. A working example can be found in the `step1` branch of this repository
 
-    git checkout step2
+   ``git checkout step2``
 
 
 ## Testing
