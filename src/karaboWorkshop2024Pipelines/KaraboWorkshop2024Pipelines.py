@@ -13,31 +13,9 @@
 #############################################################################
 
 from karabo.middlelayer import (
-    AccessMode, Assignment, Configurable, Device, Double, InputChannel, Node,
-    OutputChannel, State, UInt16, UInt32, get_timestamp)
+    AccessMode, Device, InputChannel, State, UInt32)
 
 from ._version import version as deviceVersion
-
-
-class DataNode(Configurable):
-    pixelMean = Double(
-        displayedName="Pixel Average",
-        accessMode=AccessMode.READONLY,
-        defaultValue=0.0)
-
-    pixelMin = UInt16(
-        displayedName="Min Pixel Value",
-        accessMode=AccessMode.READONLY,
-        defaultValue=0)
-
-    pixelMax = UInt16(
-        displayedName="Max Pixel Value",
-        accessMode=AccessMode.READONLY,
-        defaultValue=0)
-
-
-class ChannelNode(Configurable):
-    data = Node(DataNode)
 
 
 class KaraboWorkshop2024Pipelines(Device):
@@ -46,77 +24,20 @@ class KaraboWorkshop2024Pipelines(Device):
     def __init__(self, configuration):
         super().__init__(configuration)
 
-    @InputChannel(
-        raw=False,
-        displayedName="Input",
-        accessMode=AccessMode.INITONLY,
-        assignment=Assignment.MANDATORY)
+    @InputChannel(displayedName="Input")
     async def input(self, data, meta):
-        try:
-            # "data.image" is the path where the camera provides the image
-            image = data.data.image
-            pixels = image.pixels.value  # ndarray
+        # "data.image" is the path where the camera provides the image
+        image = data.data.image
+        pixels = image.pixels.value  # ndarray
 
-            ts = get_timestamp(meta.timestamp.timestamp)
-            await self.process_image(pixels, ts)
+        await self.process_image(pixels)
 
-            if self.state != State.PROCESSING:
-                self.state = State.PROCESSING
-                self.status = "PROCESSING"
-                self.framesAcquired = 0
-
-            self.framesAcquired += 1
-
-        except Exception as e:
-            if self.state != State.ERROR:
-                self.state = State.ERROR
-                self.status = str(e)
-
-    framesAcquired = UInt32(
-        displayedName="Frames Acquired",
-        accessMode=AccessMode.READONLY,
-        defaultValue=0)
-
-    pixelMean = Double(
-        displayedName="Pixel Average",
-        accessMode=AccessMode.READONLY)
-
-    pixelMin = UInt16(
-        displayedName="Min Pixel Value",
-        accessMode=AccessMode.READONLY)
-
-    pixelMax = UInt16(
-        displayedName="Max Pixel Value",
-        accessMode=AccessMode.READONLY)
-
-    output = OutputChannel(
-        ChannelNode,
-        displayedName="Output"
-    )
-
-    async def process_image(self, pixels, ts):
-        self.pixelMean = pixels.mean()
-        self.pixelMin = pixels.min()
-        self.pixelMax = pixels.max()
-        self.output.schema.data.pixelMean = pixels.mean()
-        self.output.schema.data.pixelMin = pixels.min()
-        self.output.schema.data.pixelMax = pixels.max()
-
-        # Writes to the output channel with the same timestamp as in the input
-        await self.output.writeData(timestamp=ts)
-
-    @input.endOfStream
-    async def input(self, name):
-        if self.state != State.ON:
-            self.state = State.ON
-            self.status = "IDLE"
-        # Forwards Input Channel's EndOfStream to the Output Channel.
-        await self.output.writeEndOfStream()
+    async def process_image(self, pixels):
+        pass
 
     async def onInitialization(self):
         """ This method will be called when the device starts.
 
             Define your actions to be executed after instantiation.
         """
-        self.status = "IDLE"
         self.state = State.ON
