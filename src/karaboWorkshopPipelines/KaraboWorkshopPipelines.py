@@ -13,9 +13,31 @@
 #############################################################################
 
 from karabo.middlelayer import (
-    AccessMode, Device, Double, InputChannel, State, UInt16, UInt32)
+    AccessMode, Configurable, Device, Double, InputChannel, Node,
+    OutputChannel, State, UInt16, UInt32)
 
 from ._version import version as deviceVersion
+
+
+class DataNode(Configurable):
+    pixelMean = Double(
+        displayedName="Pixel Average",
+        accessMode=AccessMode.READONLY,
+        defaultValue=0.0)
+
+    pixelMin = UInt16(
+        displayedName="Min Pixel Value",
+        accessMode=AccessMode.READONLY,
+        defaultValue=0)
+
+    pixelMax = UInt16(
+        displayedName="Max Pixel Value",
+        accessMode=AccessMode.READONLY,
+        defaultValue=0)
+
+
+class ChannelNode(Configurable):
+    data = Node(DataNode)
 
 
 class KaraboWorkshopPipelines(Device):
@@ -61,6 +83,11 @@ class KaraboWorkshopPipelines(Device):
     pixelMax = UInt16(
         displayedName="Max Pixel Value",
         accessMode=AccessMode.READONLY)
+
+    output = OutputChannel(
+        ChannelNode,
+        displayedName="Output"
+    )
 
     async def process_image(self, pixels):
         self.pixelMean = pixels.mean()
