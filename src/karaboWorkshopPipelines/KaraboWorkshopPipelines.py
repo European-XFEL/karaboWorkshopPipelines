@@ -39,8 +39,22 @@ class KaraboWorkshopPipelines(Device):
         accessMode=AccessMode.READONLY,
         defaultValue=0)
 
+    pixelMean = Double(
+        displayedName="Pixel Average",
+        accessMode=AccessMode.READONLY)
+
+    pixelMin = UInt16(
+        displayedName="Min Pixel Value",
+        accessMode=AccessMode.READONLY)
+
+    pixelMax = UInt16(
+        displayedName="Max Pixel Value",
+        accessMode=AccessMode.READONLY)
+
     async def process_image(self, pixels):
-        pass
+        self.pixelMean = pixels.mean()
+        self.pixelMin = pixels.min()
+        self.pixelMax = pixels.max()
 
     async def onInitialization(self):
         """ This method will be called when the device starts.
