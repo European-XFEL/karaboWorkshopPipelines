@@ -106,6 +106,8 @@ class KaraboWorkshopPipelines(Device):
         if self.state != State.ON:
             self.state = State.ON
             self.status = "Received end-of-stream"
+        # Forwards Input Channel's EndOfStream to the Output Channel.
+        await self.output.writeEndOfStream()
 
     async def onInitialization(self):
         """ This method will be called when the device starts.
