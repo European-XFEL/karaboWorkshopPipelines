@@ -14,7 +14,7 @@
 
 from karabo.middlelayer import (
     AccessMode, Configurable, Device, Double, InputChannel, Node,
-    OutputChannel, State, UInt16, UInt32)
+    OutputChannel, State, UInt16, UInt32, get_timestamp)
 
 from ._version import version as deviceVersion
 
