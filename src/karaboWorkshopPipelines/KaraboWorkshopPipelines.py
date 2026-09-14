@@ -12,7 +12,8 @@
 # Karabo itself is licensed under the terms of the MPL 2.0 license.
 #############################################################################
 
-from karabo.middlelayer import AccessMode, Device, InputChannel, State, UInt32
+from karabo.middlelayer import (
+    AccessMode, Device, Double, InputChannel, State, UInt16, UInt32)
 
 from ._version import version as deviceVersion
 
