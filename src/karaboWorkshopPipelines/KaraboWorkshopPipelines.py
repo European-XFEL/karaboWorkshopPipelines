@@ -93,6 +93,10 @@ class KaraboWorkshopPipelines(Device):
         self.pixelMean = pixels.mean()
         self.pixelMin = pixels.min()
         self.pixelMax = pixels.max()
+        self.output.schema.data.pixelMean = pixels.mean()
+        self.output.schema.data.pixelMin = pixels.min()
+        self.output.schema.data.pixelMax = pixels.max()
+        await self.output.writeData()
 
     @input.endOfStream
     async def input(self, name):
