@@ -32,6 +32,11 @@ class KaraboWorkshopPipelines(Device):
 
         await self.process_image(pixels)
 
+        if self.state != State.PROCESSING:
+            self.state = State.PROCESSING
+            self.status = "Started processing"
+            self.framesAcquired = 0
+
         self.framesAcquired += 1
 
     framesAcquired = UInt32(
@@ -56,9 +61,16 @@ class KaraboWorkshopPipelines(Device):
         self.pixelMin = pixels.min()
         self.pixelMax = pixels.max()
 
+    @input.endOfStream
+    async def input(self, name):
+        if self.state != State.ON:
+            self.state = State.ON
+            self.status = "Received end-of-stream"
+
     async def onInitialization(self):
         """ This method will be called when the device starts.
 
             Define your actions to be executed after instantiation.
         """
+        self.status = "IDLE"
         self.state = State.ON
