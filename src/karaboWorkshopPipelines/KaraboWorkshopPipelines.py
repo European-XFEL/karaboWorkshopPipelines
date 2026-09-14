@@ -53,7 +53,8 @@ class KaraboWorkshopPipelines(Device):
             image = data.data.image
             pixels = image.pixels.value  # ndarray
 
-            await self.process_image(pixels)
+            ts = get_timestamp(meta.timestamp.timestamp)
+            await self.process_image(pixels, ts)
 
             if self.state != State.PROCESSING:
                 self.state = State.PROCESSING
@@ -89,14 +90,16 @@ class KaraboWorkshopPipelines(Device):
         displayedName="Output"
     )
 
-    async def process_image(self, pixels):
+    async def process_image(self, pixels, ts):
         self.pixelMean = pixels.mean()
         self.pixelMin = pixels.min()
         self.pixelMax = pixels.max()
         self.output.schema.data.pixelMean = pixels.mean()
         self.output.schema.data.pixelMin = pixels.min()
         self.output.schema.data.pixelMax = pixels.max()
-        await self.output.writeData()
+
+        # Writes to the output channel with the same timestamp as in the input
+        await self.output.writeData(timestamp=ts)
 
     @input.endOfStream
     async def input(self, name):
