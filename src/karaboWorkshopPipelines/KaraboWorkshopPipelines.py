@@ -31,6 +31,13 @@ class KaraboWorkshopPipelines(Device):
 
         await self.process_image(pixels)
 
+        self.framesAcquired += 1
+
+    framesAcquired = UInt32(
+        displayedName="Frames Acquired",
+        accessMode=AccessMode.READONLY,
+        defaultValue=0)
+
     async def process_image(self, pixels):
         pass
 
