@@ -26,18 +26,24 @@ class KaraboWorkshopPipelines(Device):
 
     @InputChannel(displayedName="Input")
     async def input(self, data, meta):
-        # "data.image" is the path where the camera provides the image
-        image = data.data.image
-        pixels = image.pixels.value  # ndarray
+        try:
+            # "data.image" is the path where the camera provides the image
+            image = data.data.image
+            pixels = image.pixels.value  # ndarray
 
-        await self.process_image(pixels)
+            await self.process_image(pixels)
 
-        if self.state != State.PROCESSING:
-            self.state = State.PROCESSING
-            self.status = "Started processing"
-            self.framesAcquired = 0
+            if self.state != State.PROCESSING:
+                self.state = State.PROCESSING
+                self.status = "Started processing"
+                self.framesAcquired = 0
 
-        self.framesAcquired += 1
+            self.framesAcquired += 1
+
+        except Exception as e:
+            if self.state != State.ERROR:
+                self.state = State.ERROR
+                self.status = repr(e)
 
     framesAcquired = UInt32(
         displayedName="Frames Acquired",
